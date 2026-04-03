@@ -12,9 +12,8 @@ function Navbar() {
             <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             
             <div className="relative w-11 h-11 bg-slate-950 rounded-xl flex items-center justify-center overflow-hidden shadow-lg shadow-slate-200 transition-all duration-300 group-hover:scale-105 group-hover:-translate-y-0.5 group-active:scale-95">
-              {/* Replace the src with your actual logo file path */}
               <img 
-                src="/nst-logo.png" 
+                src="://www.tribuneindia.com/sortd-servichttpse/imaginary/v22-01/jpg/large/high?url=dGhldHJpYnVuZS1zb3J0ZC1wcm8tcHJvZC1zb3J0ZC9tZWRpYWVkNmQxYzUwLTE1M2ItMTFmMC05YzRkLWExYjFjMjMzZTcyMi5qcGc=" 
                 alt="NST Logo" 
                 className="w-full h-full object-cover p-1.5" 
               />
