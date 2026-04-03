@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5001/api' 
+  baseURL: 'https://nst-backend-blw1.onrender.com/api', 
 });
 
 export const getFaqs = (category) => {
@@ -10,11 +10,8 @@ export const getFaqs = (category) => {
 };
 
 export const createFaq = (faqData) => api.post('/faqs', faqData);
-
 export const getStudents = () => api.get('/students');
-
 export const getQueries = () => api.get('/queries');
-
 export const createQuery = (queryData) => api.post('/queries', queryData);
 
 export default api;

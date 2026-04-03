@@ -14,7 +14,8 @@ const seedData = async () => {
     await Student.deleteMany({});
 
     await Faq.create([
-      { category: 'Academics', question: 'What is the curriculum like?', answer: 'It is highly practical and industry-focused.' },
+      { category: 'Academics', question: 'What is the curriculum like?', answer: 'It is highly practical and industry-focused. For the First year, The main focus is on HTML, CSS, and JavaScript(React), Basic Maths, and Python(DSA)' },
+      { category: 'Hostel', question: 'What is the hostel life like?', answer: 'The hostel provides a comfortable and conducive environment for learning and socializing.' },
       { category: 'Placements', question: 'Are there guaranteed placements?', answer: 'We offer extensive placement support and a strong alumni network.' }
     ]);
 
