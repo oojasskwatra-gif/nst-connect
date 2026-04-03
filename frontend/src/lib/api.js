@@ -17,4 +17,6 @@ export const createQuery = (queryData) => api.post('/queries', queryData);
 // NEW: Function to update query status from Pending to Resolved
 export const updateQueryStatus = (id, status) => api.patch(`/queries/${id}/status`, { status });
 
+export const createStudent = (studentData) => api.post('/students', studentData);
+
 export default api;
