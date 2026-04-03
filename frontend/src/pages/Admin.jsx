@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   loginAdmin, getQueries, createFaq, getFaqs, updateQueryStatus, 
-  getPendingStudents, approveStudent, 
+  getPendingStudents, getStudents, approveStudent, // Added getStudents here
   deleteFaq, deleteStudent, deleteQuery 
 } from '../lib/api';
 
@@ -11,6 +11,7 @@ function Admin() {
   
   const [queries, setQueries] = useState([]);
   const [pendingStudents, setPendingStudents] = useState([]);
+  const [activeStudents, setActiveStudents] = useState([]); // New state for approved mentors
   const [faqs, setFaqs] = useState([]); 
   
   const [faqForm, setFaqForm] = useState({ category: 'Academics', question: '', answer: '' });
@@ -31,13 +32,15 @@ function Admin() {
 
   const fetchData = async () => {
     try {
-      const [queriesRes, studentsRes, faqsRes] = await Promise.all([
+      const [queriesRes, pendingRes, activeRes, faqsRes] = await Promise.all([
         getQueries(),
         getPendingStudents(),
+        getStudents(), // Fetch approved mentors
         getFaqs('All') 
       ]);
       setQueries(queriesRes.data);
-      setPendingStudents(studentsRes.data);
+      setPendingStudents(pendingRes.data);
+      setActiveStudents(activeRes.data);
       setFaqs(faqsRes.data);
     } catch (error) {
       console.error("Error fetching admin data", error);
@@ -51,7 +54,6 @@ function Admin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // Use the new loginAdmin API call
       const response = await loginAdmin(password);
       localStorage.setItem('adminToken', response.data.token);
       setIsAuthenticated(true);
@@ -64,7 +66,7 @@ function Admin() {
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     setIsAuthenticated(false);
-    setPassword(''); // Clear the password field
+    setPassword(''); 
   };
 
   // --- CREATE & UPDATE HANDLERS ---
@@ -92,7 +94,10 @@ function Admin() {
   const handleApproveMentor = async (id) => {
     try {
       await approveStudent(id);
+      // Move student from pending to active state locally
+      const studentToApprove = pendingStudents.find(s => s._id === id);
       setPendingStudents(pendingStudents.filter(s => s._id !== id));
+      setActiveStudents([...activeStudents, { ...studentToApprove, isApproved: true }]);
       alert("Mentor approved and live!");
     } catch (error) {
       console.error("Approval failed", error);
@@ -113,7 +118,9 @@ function Admin() {
     if (window.confirm("Remove this mentor permanently?")) {
       try {
         await deleteStudent(id);
+        // Remove from both lists just in case
         setPendingStudents(pendingStudents.filter(s => s._id !== id));
+        setActiveStudents(activeStudents.filter(s => s._id !== id));
       } catch (err) { console.error(err); }
     }
   };
@@ -151,7 +158,6 @@ function Admin() {
   // --- RENDER DASHBOARD ---
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 space-y-12">
-      {/* Added a Logout Button */}
       <div className="flex justify-end">
         <button 
           onClick={handleLogout} 
@@ -163,6 +169,47 @@ function Admin() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         
+        {/* MENTOR MANAGEMENT SECTION */}
+        <div className="space-y-8">
+          {/* PENDING MENTORS */}
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-orange-100">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+              Pending Approval <span className="bg-orange-500 text-white text-xs px-2 py-1 rounded-full">{pendingStudents.length}</span>
+            </h2>
+            <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+              {pendingStudents.map(s => (
+                <div key={s._id} className="p-3 bg-slate-50 rounded-xl border flex justify-between items-center">
+                  <div>
+                    <p className="font-bold text-sm">{s.name}</p>
+                    <p className="text-xs text-slate-500">{s.techStack.join(', ')}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => handleApproveMentor(s._id)} className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-lg text-xs font-bold transition">Approve</button>
+                    <button onClick={() => handleDeleteStudent(s._id)} className="bg-red-50 text-red-500 hover:bg-red-100 p-2 rounded-lg text-xs transition">🗑️</button>
+                  </div>
+                </div>
+              ))}
+              {pendingStudents.length === 0 && <p className="text-gray-400 text-sm italic">No pending requests.</p>}
+            </div>
+          </div>
+
+          {/* ACTIVE MENTORS */}
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-green-100">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+              Active Mentors <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">{activeStudents.length}</span>
+            </h2>
+            <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+              {activeStudents.map(s => (
+                <div key={s._id} className="p-3 bg-white rounded-xl border flex justify-between items-center shadow-sm">
+                  <p className="font-bold text-sm">{s.name}</p>
+                  <button onClick={() => handleDeleteStudent(s._id)} className="text-red-400 hover:text-red-600 text-sm font-semibold transition">Remove</button>
+                </div>
+              ))}
+              {activeStudents.length === 0 && <p className="text-gray-400 text-sm italic">No active mentors.</p>}
+            </div>
+          </div>
+        </div>
+
         {/* SECTION 1: MANAGE FAQS */}
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 h-fit">
           <h2 className="text-2xl font-bold mb-6">Manage FAQs</h2>
@@ -171,7 +218,7 @@ function Admin() {
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">Category</label>
                 <select 
-                  className="w-full p-2 border rounded-lg text-sm"
+                  className="w-full p-2 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-blue-500"
                   value={faqForm.category}
                   onChange={(e) => setFaqForm({...faqForm, category: e.target.value})}
                 >
@@ -186,7 +233,7 @@ function Admin() {
                 <input 
                   type="text" required value={faqForm.question}
                   onChange={(e) => setFaqForm({...faqForm, question: e.target.value})}
-                  className="w-full p-2 border rounded-lg text-sm"
+                  className="w-full p-2 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -195,7 +242,7 @@ function Admin() {
               <textarea 
                 required rows="2" value={faqForm.answer}
                 onChange={(e) => setFaqForm({...faqForm, answer: e.target.value})}
-                className="w-full p-2 border rounded-lg text-sm"
+                className="w-full p-2 border rounded-lg text-sm outline-none focus:ring-1 focus:ring-blue-500"
               ></textarea>
             </div>
             <button type="submit" className="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition text-sm">
@@ -204,14 +251,14 @@ function Admin() {
           </form>
 
           {/* List existing FAQs to delete */}
-          <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+          <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2">
             {faqs.map(faq => (
               <div key={faq._id} className="flex justify-between items-start p-3 bg-slate-50 rounded-lg border border-slate-100 text-sm">
                 <div>
                   <span className="text-[10px] font-bold text-blue-600 uppercase block mb-1">{faq.category}</span>
                   <p className="font-semibold text-slate-800">{faq.question}</p>
                 </div>
-                <button onClick={() => handleDeleteFaq(faq._id)} className="text-red-500 p-1 hover:bg-red-100 rounded ml-2" title="Delete FAQ">
+                <button onClick={() => handleDeleteFaq(faq._id)} className="text-red-400 p-1 hover:bg-red-100 rounded ml-2 transition" title="Delete FAQ">
                   🗑️
                 </button>
               </div>
@@ -219,43 +266,6 @@ function Admin() {
           </div>
         </div>
 
-        {/* SECTION 2: PENDING MENTORS */}
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            Pending Mentors <span className="text-sm bg-orange-100 text-orange-600 px-3 py-1 rounded-full">{pendingStudents.length}</span>
-          </h2>
-          <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-            {pendingStudents.map((student) => (
-              <div key={student._id} className="p-5 bg-slate-50 rounded-xl border border-slate-200">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="font-bold text-lg">{student.name}</h3>
-                    <p className="text-xs text-indigo-600 font-bold uppercase tracking-wider">Year {student.year}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => handleApproveMentor(student._id)}
-                      className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-green-700"
-                    >
-                      Approve
-                    </button>
-                    {/* NEW DELETE BUTTON FOR STUDENTS */}
-                    <button 
-                      onClick={() => handleDeleteStudent(student._id)}
-                      className="bg-red-50 text-red-600 px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-red-100 border border-red-100"
-                      title="Delete Permanently"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </div>
-                <p className="text-sm text-slate-600 mb-2"><strong>Tech:</strong> {student.techStack.join(', ')}</p>
-                <a href={student.calendlyLink} target="_blank" className="text-xs text-blue-500 underline">View Calendly</a>
-              </div>
-            ))}
-            {pendingStudents.length === 0 && <p className="text-gray-400 text-center py-10">No new mentor requests.</p>}
-          </div>
-        </div>
       </div>
 
       {/* SECTION 3: QUERIES */}
@@ -265,7 +275,6 @@ function Admin() {
           {queries.map((query) => (
             <div key={query._id} className="p-5 rounded-xl border border-gray-200 flex flex-col justify-between relative group">
               
-              {/* NEW DELETE BUTTON FOR QUERIES (Shows on hover) */}
               <button 
                 onClick={() => handleDeleteQuery(query._id)}
                 className="absolute -top-3 -right-3 bg-red-100 text-red-600 p-2 rounded-full opacity-0 group-hover:opacity-100 transition shadow-sm hover:bg-red-200"
@@ -284,9 +293,9 @@ function Admin() {
                 <p className="text-sm text-gray-600 mb-4 bg-gray-50 p-3 rounded-lg italic">"{query.message}"</p>
               </div>
               <div className="flex gap-2">
-                <a href={`mailto:${query.senderEmail}`} className="flex-1 text-center text-xs bg-slate-100 py-2 rounded-lg font-bold">Email</a>
+                <a href={`mailto:${query.senderEmail}`} className="flex-1 text-center text-xs bg-slate-100 py-2 rounded-lg font-bold hover:bg-slate-200 transition">Email</a>
                 {query.status !== 'Resolved' && (
-                  <button onClick={() => handleStatusUpdate(query._id)} className="flex-1 text-xs bg-green-50 text-green-600 py-2 rounded-lg font-bold border border-green-100">
+                  <button onClick={() => handleStatusUpdate(query._id)} className="flex-1 text-xs bg-green-50 text-green-600 py-2 rounded-lg font-bold border border-green-100 hover:bg-green-100 transition">
                     Resolve
                   </button>
                 )}

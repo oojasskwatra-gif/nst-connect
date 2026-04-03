@@ -4,6 +4,7 @@ import { getStudents } from '../lib/api';
 
 function Connect() {
   const [students, setStudents] = useState([]);
+  const [activeFilter, setActiveFilter] = useState('All'); // NEW: Filter state
 
   useEffect(() => {
     fetchStudents();
@@ -18,18 +19,46 @@ function Connect() {
     }
   };
 
+  // NEW: Categories for the filter chips
+  const categories = ['All', 'MERN', 'AI/ML', 'UI/UX', 'Python', 'Data Science'];
+
+  // NEW: Filter logic
+  const filteredStudents = activeFilter === 'All' 
+    ? students 
+    : students.filter(student => 
+        student.techStack.some(tech => tech.toLowerCase().includes(activeFilter.toLowerCase()))
+      );
+
   return (
     <div className="min-h-screen bg-slate-50 py-20 px-4">
       <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-16">
+        <header className="text-center mb-12">
           <h1 className="text-4xl font-black text-slate-900 mb-4">Meet Your Mentors</h1>
           <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
-            Get personalized insights into the NST ecosystem. Book a call with students specialized in AI, Full-Stack, and Data Science.
+            Get personalized insights into the NST ecosystem. Book a call with students specialized in your field of interest.
           </p>
         </header>
 
+        {/* NEW: Filter Buttons */}
+        <div className="flex gap-3 mb-12 overflow-x-auto pb-4 justify-center hide-scrollbar">
+          {categories.map(cat => (
+            <button 
+              key={cat}
+              onClick={() => setActiveFilter(cat)}
+              className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all whitespace-nowrap ${
+                activeFilter === cat 
+                  ? 'bg-slate-900 text-white shadow-md' 
+                  : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Change students.map to filteredStudents.map */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {students.map((student) => (
+          {filteredStudents.map((student) => (
             <div key={student._id} className="group bg-white rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 p-8 flex flex-col relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -mr-12 -mt-12 transition-all group-hover:bg-indigo-100"></div>
               
@@ -40,7 +69,7 @@ function Connect() {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-slate-800">{student.name}</h2>
-                    <p className="text-sm font-bold text-indigo-600 uppercase tracking-widest">Batch 202{4+parseInt(student.year)} • Year {student.year}</p>
+                    <p className="text-sm font-bold text-indigo-600 uppercase tracking-widest">Year {student.year}</p>
                   </div>
                 </div>
                 
@@ -56,60 +85,26 @@ function Connect() {
                 </div>
 
                 <div className="flex gap-3">
-                  <a 
-                    href={student.calendlyLink} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 bg-slate-900 text-white font-bold py-3 rounded-2xl hover:bg-indigo-600 transition-all shadow-lg shadow-slate-200 hover:-translate-y-1"
-                  >
+                  <a href={student.calendlyLink} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-slate-900 text-white font-bold py-3 rounded-2xl hover:bg-indigo-600 transition-all shadow-lg hover:-translate-y-1">
                     <span>Schedule</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
                   </a>
-
                   {student.whatsappNumber && (
-                    <a 
-                      href={`https://wa.me/${student.whatsappNumber.replace(/\D/g, '')}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-3 rounded-2xl hover:bg-[#128C7E] transition-all shadow-lg shadow-slate-200 hover:-translate-y-1"
-                    >
+                    <a href={`https://wa.me/${student.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-3 rounded-2xl hover:bg-[#128C7E] transition-all shadow-lg hover:-translate-y-1">
                       <span>WhatsApp</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
-                      </svg>
                     </a>
                   )}
                 </div>
-
               </div>
             </div>
           ))}
         </div>
         
-        {students.length === 0 && (
+        {/* If a filter yields no results */}
+        {filteredStudents.length === 0 && (
           <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
-            <p className="text-slate-400 font-medium">Seniors are currently in class. Check back soon.</p>
+            <p className="text-slate-400 font-medium">No mentors found for this category yet.</p>
           </div>
         )}
-
-        <section className="mt-24 py-16 px-8 bg-slate-900 rounded-[3rem] text-center text-white overflow-hidden relative shadow-2xl">
-          <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-500/10 rounded-full -ml-32 -mt-32 blur-3xl"></div>
-          
-          <div className="relative z-10">
-            <h2 className="text-3xl font-bold mb-4">Are you an NST Student?</h2>
-            <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-              Share your knowledge and help the next generation of tech leaders. Join our community of student mentors.
-            </p>
-            <Link 
-              to="/join" 
-              className="inline-block bg-white text-slate-900 font-black px-8 py-4 rounded-2xl hover:bg-indigo-50 transition-all hover:-translate-y-1"
-            >
-              Apply to be a Mentor
-            </Link>
-          </div>
-        </section>
 
       </div>
     </div>
