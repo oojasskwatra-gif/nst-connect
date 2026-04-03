@@ -1,64 +1,49 @@
-import { useState, useEffect } from 'react';
-import { getStudents } from '../lib/api';
+import { Link } from 'react-router-dom';
 
-function Connect() {
-  const [students, setStudents] = useState([]);
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  const fetchStudents = async () => {
-    try {
-      const response = await getStudents();
-      setStudents(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+function Home() {
   return (
-    <div className="max-w-6xl mx-auto py-12 px-4">
-      <h1 className="text-3xl font-bold text-center mb-4">Talk to a Senior</h1>
-      <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-        Select a student whose background matches your interests and book a 1-on-1 session to clear all your doubts regarding NST.
-      </p>
+    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-indigo-50 via-white to-slate-50">
+      <section className="pt-32 pb-20 px-4 text-center max-w-4xl mx-auto">
+        <span className="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wide text-indigo-600 uppercase bg-indigo-50 rounded-full border border-indigo-100">
+          Official NST Student Support
+        </span>
+        <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+          Your Future at <span className="text-indigo-600">NST</span> <br /> Starts with Clarity.
+        </h1>
+        <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+          The bridge between prospective students and real campus life. Get unfiltered answers from seniors who are already living the journey.
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <Link to="/faqs" className="bg-indigo-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 hover:-translate-y-1">
+            Browse Knowledge Base
+          </Link>
+          <Link to="/connect" className="bg-white text-slate-900 border border-slate-200 px-10 py-4 rounded-xl font-bold hover:bg-slate-50 transition-all shadow-sm hover:-translate-y-1">
+            Talk to a Senior
+          </Link>
+        </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {students.map((student) => (
-          <div key={student._id} className="bg-white rounded-xl shadow-md border border-gray-100 p-6 flex flex-col">
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">{student.name}</h2>
-              <p className="text-sm text-gray-500 font-medium mt-1">Year {student.year} Student</p>
-            </div>
-            
-            <div className="mb-6 flex-grow">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Tech Stack:</h3>
-              <div className="flex flex-wrap gap-2">
-                {student.techStack.map((tech, index) => (
-                  <span key={index} className="bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-md font-medium">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <a 
-              href={student.calendlyLink} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="block w-full text-center bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              Book a Call
-            </a>
+      <section className="py-24 max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="group bg-white/60 backdrop-blur-md p-10 rounded-3xl border border-white shadow-xl shadow-slate-200/50 transition-all hover:border-indigo-200">
+            <div className="bg-indigo-600 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-indigo-200 shadow-lg text-white font-bold text-xl">1</div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-3">Search</h3>
+            <p className="text-slate-600 leading-relaxed">Access a curated database of common queries about the M4 MacBook, Sonipat hostel, and AI curriculum.</p>
           </div>
-        ))}
-      </div>
-      {students.length === 0 && (
-        <p className="text-center text-gray-500 py-8">No active students available at the moment.</p>
-      )}
+          <div className="group bg-white/60 backdrop-blur-md p-10 rounded-3xl border border-white shadow-xl shadow-slate-200/50 transition-all hover:border-indigo-200">
+            <div className="bg-indigo-600 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-indigo-200 shadow-lg text-white font-bold text-xl">2</div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-3">Connect</h3>
+            <p className="text-slate-600 leading-relaxed">Filter seniors by their tech stack or year. Find someone building exactly what you want to learn.</p>
+          </div>
+          <div className="group bg-white/60 backdrop-blur-md p-10 rounded-3xl border border-white shadow-xl shadow-slate-200/50 transition-all hover:border-indigo-200">
+            <div className="bg-indigo-600 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-indigo-200 shadow-lg text-white font-bold text-xl">3</div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-3">Succeed</h3>
+            <p className="text-slate-600 leading-relaxed">Book a 1-on-1 Calendly session to finalize your decision with confidence and peer-reviewed facts.</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
 
-export default Connect;
+export default Home;
