@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getStudents } from '../lib/api';
 
 function Connect() {
@@ -92,6 +93,24 @@ function Connect() {
             <p className="text-slate-400 font-medium">Seniors are currently in class. Check back soon.</p>
           </div>
         )}
+
+        <section className="mt-24 py-16 px-8 bg-slate-900 rounded-[3rem] text-center text-white overflow-hidden relative shadow-2xl">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-500/10 rounded-full -ml-32 -mt-32 blur-3xl"></div>
+          
+          <div className="relative z-10">
+            <h2 className="text-3xl font-bold mb-4">Are you an NST Student?</h2>
+            <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+              Share your knowledge and help the next generation of tech leaders. Join our community of student mentors.
+            </p>
+            <Link 
+              to="/join" 
+              className="inline-block bg-white text-slate-900 font-black px-8 py-4 rounded-2xl hover:bg-indigo-50 transition-all hover:-translate-y-1"
+            >
+              Apply to be a Mentor
+            </Link>
+          </div>
+        </section>
+
       </div>
     </div>
   );

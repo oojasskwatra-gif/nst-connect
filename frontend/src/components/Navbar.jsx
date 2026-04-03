@@ -5,11 +5,17 @@ function Navbar() {
     <nav className="bg-blue-900 text-white p-4 shadow-md">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         <Link to="/" className="text-xl font-bold tracking-wider">NST Connect</Link>
-        <div className="space-x-6">
+        <div className="space-x-6 flex items-center">
           <Link to="/" className="hover:text-blue-300">Home</Link>
           <Link to="/faqs" className="hover:text-blue-300">Knowledge Base</Link>
           <Link to="/connect" className="hover:text-blue-300">Talk to Seniors</Link>
           <Link to="/admin" className="hover:text-blue-300">Admin</Link>
+          <Link 
+            to="/join" 
+            className="bg-blue-500 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-400 transition-all shadow-sm ml-4"
+          >
+            Become a Mentor
+          </Link>
         </div>
       </div>
     </nav>
