@@ -4,7 +4,7 @@ import Magnetic from '../components/Magnetic';
 import LiveActivity from '../components/LiveActivity';
 
 function Home() {
-  const nstLogo = "https://www.tribuneindia.com/sortd-service/imaginary/v22-01/jpg/large/high?url=dGhldHJpYnVuZS1zb3J0ZC1wcm8tcHJvZC1zb3J0ZC9tZWRpYWVkNmQxYzUwLTE1M2ItMTFmMC05YzRkLWExYjFjMjMzZTcyMi5qcGc=";
+  const nstLogo = "://www.tribuneindia.com/sortd-servichttpse/imaginary/v22-01/jpg/large/high?url=dGhldHJpYnVuZS1zb3J0ZC1wcm8tcHJvZC1zb3J0ZC9tZWRpYWVkNmQxYzUwLTE1M2ItMTFmMC05YzRkLWExYjFjMjMzZTcyMi5qcGc=";
   const nsatLink = "https://www.newtonschool.co/newton-school-of-technology-nst/apply-referral/?utm_source=referral&utm_medium=kushalrathore19&utm_campaign=btech-computer-science-nst-students-referral-invite-your-junior--portal-referral";
 
   return (
