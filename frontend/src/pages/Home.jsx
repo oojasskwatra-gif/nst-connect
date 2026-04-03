@@ -31,8 +31,8 @@ function Home() {
               transition={{ duration: 0.8 }}
               className="text-7xl md:text-8xl font-black tracking-tighter leading-[0.85] mb-12"
             >
-              Peer-to-Peer <br />
-              <span className="text-indigo-600">Intelligence.</span>
+              Get the Inside Track on<br />
+              <span className="text-indigo-600">Newton School</span>
             </motion.h1>
 
             <motion.p 
@@ -41,19 +41,18 @@ function Home() {
               transition={{ delay: 0.3 }}
               className="text-xl text-slate-600 max-w-xl mb-12 leading-relaxed font-medium"
             >
-              The definitive resource for NSAT aspirants. High-fidelity guidance on the AI-first curriculum, directly from the Batch leads at Newton School of Technology.
-            </motion.p>
+              Get direct guidance on the NSAT and our AI-first curriculum from the seniors who are already living it.</motion.p>
 
             <div className="flex flex-wrap gap-4">
               <Magnetic>
                 <Link to="/connect" className="px-8 py-4 bg-slate-900 text-white rounded-lg font-bold text-sm hover:bg-indigo-600 transition-all flex items-center gap-3">
-                  Consult Batch Leads
+                  Talk to a Senior →
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               </Magnetic>
               <Magnetic>
                 <a href={nsatLink} className="px-8 py-4 bg-white border border-slate-200 rounded-lg font-bold text-sm hover:border-slate-400 transition-all">
-                  Apply for NSAT 2026
+                  Apply for NSAT
                 </a>
               </Magnetic>
             </div>
@@ -63,16 +62,16 @@ function Home() {
           <div className="hidden lg:block w-96 bg-white border border-slate-200 p-8 rounded-2xl shadow-sm rotate-1">
             <div className="space-y-6">
               <div className="pb-4 border-b border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Campus Baseline</p>
-                <p className="text-sm font-black">Sonipat, Haryana (In-Residence)</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Primary Hub</p>
+                <p className="text-sm font-black">Newton School of Technology</p>
               </div>
               <div className="pb-4 border-b border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Hardware Standard</p>
-                <p className="text-sm font-black">Apple MacBook Pro (M4 Series)</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Community Validated</p>
+                <p className="text-sm font-black">100% Peer-Verified Data</p>
               </div>
               <div className="pb-4 border-b border-slate-100">
-                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Lead Mentors</p>
-                <p className="text-sm font-black">MERN, AI/ML & System Design Leads</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Expert Network</p>
+                <p className="text-sm font-black">Direct Access to MERN, AI/ML & System Design Leads</p>
               </div>
               <div className="pt-2">
                 <div className="flex gap-1">
