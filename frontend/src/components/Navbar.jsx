@@ -10,12 +10,6 @@ function Navbar() {
           <Link to="/faqs" className="hover:text-blue-300">Knowledge Base</Link>
           <Link to="/connect" className="hover:text-blue-300">Talk to Seniors</Link>
           <Link to="/admin" className="hover:text-blue-300">Admin</Link>
-          <Link 
-            to="/join" 
-            className="bg-blue-500 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-400 transition-all shadow-sm ml-4"
-          >
-            Become a Mentor
-          </Link>
         </div>
       </div>
     </nav>
