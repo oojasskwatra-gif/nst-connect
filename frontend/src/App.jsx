@@ -12,9 +12,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/faqs" element={<Faqs />} />
-        <Route path="/connect" element={<Connect />} /> {/* 2. Check this route */}
+        <Route path="/connect" element={<Connect />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
     </Router>
   );
 }
+
+export default App;
