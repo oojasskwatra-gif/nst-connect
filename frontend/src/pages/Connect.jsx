@@ -21,7 +21,7 @@ function Connect() {
     } catch (error) {
       console.error(error);
     } finally {
-      // Simulate a small delay for the "shimmer" effect to be visible (optional)
+      // Simulate a small delay for the "shimmer" effect to be visible on fast connections
       setTimeout(() => setLoading(false), 800);
     }
   };
@@ -43,7 +43,7 @@ function Connect() {
     <div className="min-h-screen bg-slate-50 py-20 px-4 selection:bg-indigo-100">
       <div className="max-w-6xl mx-auto">
         
-        {/* --- HEADER --- */}
+        {/* Headrer */}
         <header className="text-center mb-16">
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
@@ -57,7 +57,7 @@ function Connect() {
           </p>
         </header>
 
-        {/* --- SEARCH & FILTERS --- */}
+        {/* Search & Filters */}
         <div className="space-y-6 mb-16">
           {/* Search Bar */}
           <div className="max-w-xl mx-auto relative group">
@@ -93,7 +93,7 @@ function Connect() {
           </div>
         </div>
 
-        {/* --- MENTOR GRID --- */}
+        {/* Mentor Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="wait">
             {loading ? (

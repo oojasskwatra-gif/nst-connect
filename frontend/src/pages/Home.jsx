@@ -116,6 +116,35 @@ function Home() {
 
         </div>
       </section>
+      {/* --- MENTOR RECRUITMENT CTA --- */}
+      <section className="max-w-7xl mx-auto px-8 pb-24">
+        <div className="bg-slate-900 text-white rounded-[2rem] p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+          {/* Background Glow Effect */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/30 blur-[100px] rounded-full pointer-events-none"></div>
+          
+          <div className="relative z-10 max-w-xl text-center md:text-left">
+            <div className="inline-block px-4 py-1.5 mb-6 bg-indigo-500/20 text-indigo-300 text-[10px] font-black uppercase tracking-widest rounded-full border border-indigo-500/30">
+              For Current NST Students
+            </div>
+            <h2 className="text-3xl md:text-4xl font-black mb-4 tracking-tight leading-tight">
+              Pay it forward. <br />
+              <span className="text-indigo-400">Become a Lead Mentor.</span>
+            </h2>
+            <p className="text-slate-400 font-medium text-sm md:text-base leading-relaxed">
+              Help the next generation navigate the NSAT and their first year. Build your leadership portfolio while giving back to the community.
+            </p>
+          </div>
+
+          <div className="relative z-10 w-full md:w-auto flex-shrink-0">
+            <Link 
+              to="/join" 
+              className="block w-full md:w-auto px-10 py-5 bg-white text-slate-900 text-center font-black rounded-2xl hover:bg-indigo-50 hover:scale-105 active:scale-95 transition-all duration-300 shadow-xl shadow-black/20"
+            >
+              Apply as Mentor
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <footer className="max-w-7xl mx-auto px-8 pb-24">
         <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-12 flex flex-col md:flex-row justify-between items-center gap-8">
