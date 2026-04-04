@@ -128,7 +128,7 @@ function Connect() {
                       <div>
                         <h2 className="text-2xl font-bold text-slate-800 tracking-tight">{student.name}</h2>
                         <span className="text-xs font-black text-indigo-600 uppercase tracking-widest bg-indigo-50 px-2 py-1 rounded-md">
-                          Batch 202{student.year}
+                          Batch {student.year==1 ? '2025' : student.year==2 ? '2024' : student.year==3 ? '2023' : '2022'}
                         </span>
                       </div>
                     </div>
